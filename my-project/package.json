@@ -2,20 +2,27 @@
   "name": "my-project",
   "version": "0.1.0",
   "private": true,
-"scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
-  "prisma": "npm exec prisma",                    
-  "prisma:init": "npm exec prisma init",
-  "prisma:generate": "npm exec prisma generate",
-  "prisma:migrate": "npm exec prisma migrate dev",
-  "prisma:studio": "npm exec prisma studio"
-},
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:push": "prisma db push",
+    "db:seed": "ts-node prisma/seed.ts",
+    "db:reset": "prisma migrate reset --force",
+    
+    "prepare": "npm run db:generate",
+    "postinstall": "prisma generate"
+  },
   "dependencies": {
     "@prisma/client": "^6.13.0",
+    "bcryptjs": "^3.0.2",
     "next": "15.4.5",
+    "next-auth": "^4.24.11",
     "postcss": "^8.5.6",
     "react": "19.1.0",
     "react-dom": "19.1.0"

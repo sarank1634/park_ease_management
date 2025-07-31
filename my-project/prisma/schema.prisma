@@ -1,15 +1,106 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  AD_MANAGER
+}
+
+enum SlotStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum BookingStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id            String      @id @default(uuid())
+  name          String
+  email         String     @unique
+  password      String
+  role          UserRole   @default(USER)
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  parkingLots   ParkingLot[]
+  bookings      Booking[]
+  adBanners     AdBanner[]
+}
+
+model ParkingLot {
+  id             String        @id @default(uuid())
+  name           String
+  address        String
+  pricePerHour   Float
+  totalSlots     Int
+  availableSlots Int
+  ownerId        String
+  owner          User          @relation(fields: [ownerId], references: [id])
+  parkingSlots   ParkingSlot[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model ParkingSlot {
+  id          String     @id @default(uuid())
+  slotNumber  String
+  status      SlotStatus @default(AVAILABLE)
+  lotId       String
+  lot         ParkingLot @relation(fields: [lotId], references: [id])
+  bookings    Booking[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Booking {
+  id             String        @id @default(uuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id])
+  slotId         String
+  slot           ParkingSlot   @relation(fields: [slotId], references: [id])
+  vehicleNumber  String
+  vehicleModel   String?
+  contactNumber  String
+  startTime      DateTime      @default(now())
+  endTime        DateTime?
+  hoursParked    Int
+  totalPrice     Float
+  status         BookingStatus @default(ACTIVE)
+  cancelledAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model AdBanner {
+  id           String   @id @default(uuid())
+  title        String
+  imageUrl     String
+  targetUrl    String?
+  displayFrom  DateTime
+  displayTo    DateTime
+  status       Boolean  @default(true)
+  clickCount   Int      @default(0)
+  viewCount    Int      @default(0)
+  createdById  String
+  createdBy    User     @relation(fields: [createdById], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
