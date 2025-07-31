@@ -1,0 +1,35 @@
+{
+  "name": "my-project",
+  "version": "0.1.0",
+  "private": true,
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "prisma": "npm exec prisma",                    
+  "prisma:init": "npm exec prisma init",
+  "prisma:generate": "npm exec prisma generate",
+  "prisma:migrate": "npm exec prisma migrate dev",
+  "prisma:studio": "npm exec prisma studio"
+},
+  "dependencies": {
+    "@prisma/client": "^6.13.0",
+    "next": "15.4.5",
+    "postcss": "^8.5.6",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.5",
+    "prisma": "^6.13.0",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5"
+  }
+}
